@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameOfLife
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Achse : DrawableGameComponent
     {
         public const int AchseWidth = 400;
@@ -24,6 +27,12 @@ namespace GameOfLife
         public Input Input;
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="spriteBatch"></param>
+        /// <param name="input"></param>
         public Achse(Game game, SpriteBatch spriteBatch, Input input) : base(game)
         {
             Cells = new bool[2, AchseWidth + 2, AchseHeight + 2];
@@ -32,6 +41,9 @@ namespace GameOfLife
             this.Input = input;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void LoadContent()
         {
             LivingCellTexture = new Texture2D(GraphicsDevice, 1, 1);
@@ -43,13 +55,32 @@ namespace GameOfLife
             base.LoadContent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int MillisecondsSinceUpdated;
+        /// <summary>
+        /// 
+        /// </summary>
         public int CurrentIndex;
+        /// <summary>
+        /// 
+        /// </summary>
         public int FutureIndex = 1;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int OldWidth;
+        /// <summary>
+        /// 
+        /// </summary>
         public int OldHeight;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             if (Input.SpaceTrigger)
