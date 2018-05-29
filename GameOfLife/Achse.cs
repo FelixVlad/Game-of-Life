@@ -67,10 +67,11 @@ namespace GameOfLife
             if (_input.SpaceTrigger)
                 CreateRandomCells(20);
             
-
             if (_input.ResetTrigger)
                 ResetCells();
-            
+
+            if (_input.FigureTrigger)
+                FigureCells();
 
             _millisecondsSinceUpdated += gameTime.ElapsedGameTime.Milliseconds;
 
@@ -217,5 +218,16 @@ namespace GameOfLife
             }
         }
 
+        private void FigureCells()
+        {
+            for (var y = 1; y < AchseHeight + 1; y++)
+            {
+                for (var x = 1; x < AchseWidth + 1; x++)
+                {
+                    if(x == y || AchseWidth - x == y )
+                        _zellen[_currentIndex, x, y] = true;
+                }
+            }
+        }
     }
 }

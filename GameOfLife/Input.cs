@@ -36,6 +36,8 @@ namespace GameOfLife
         /// </summary>
         public bool ResetTrigger { get; private set; }
 
+        public bool FigureTrigger { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -46,12 +48,16 @@ namespace GameOfLife
 
             SpaceTrigger = false;
             ResetTrigger = false;
+            FigureTrigger = false;
 
             if (currentState.IsKeyDown(Keys.Space) && !_oldState.IsKeyDown(Keys.Space))
                 SpaceTrigger = true;
              
             if (currentState.IsKeyDown(Keys.R) && !_oldState.IsKeyDown(Keys.R))
                 ResetTrigger = true;
+
+            if (currentState.IsKeyDown(Keys.F) && !_oldState.IsKeyDown(Keys.F))
+                FigureTrigger = true;
 
             _oldState = currentState;
 
