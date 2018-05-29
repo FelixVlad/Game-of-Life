@@ -4,9 +4,44 @@
         <name>GameOfLife</name>
     </assembly>
     <members>
+        <member name="T:GameOfLife.Achse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GameOfLife.Achse.#ctor(Microsoft.Xna.Framework.Game,Microsoft.Xna.Framework.Graphics.SpriteBatch,GameOfLife.Input)">
+            <summary>
+            
+            </summary>
+            <param name="game"></param>
+            <param name="spriteBatch"></param>
+            <param name="input"></param>
+        </member>
+        <member name="M:GameOfLife.Achse.LoadContent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GameOfLife.Achse.Update(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            
+            </summary>
+            <param name="gameTime"></param>
+        </member>
+        <member name="M:GameOfLife.Achse.Draw(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            
+            </summary>
+            <param name="gameTime"></param>
+        </member>
         <member name="T:GameOfLife.Game1">
             <summary>
             This is the main type for your game.
+            </summary>
+        </member>
+        <member name="M:GameOfLife.Game1.#ctor">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:GameOfLife.Game1.Initialize">
@@ -41,6 +76,33 @@
             This is called when the game should draw itself.
             </summary>
             <param name="gameTime">Provides a snapshot of timing values.</param>
+        </member>
+        <member name="T:GameOfLife.Input">
+            <summary>
+            The Input class.
+            </summary>  
+        </member>
+        <member name="M:GameOfLife.Input.#ctor(Microsoft.Xna.Framework.Game)">
+            <summary>
+            
+            </summary>
+            <param name="game"></param>
+        </member>
+        <member name="P:GameOfLife.Input.SpaceTrigger">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:GameOfLife.Input.ResetTrigger">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GameOfLife.Input.Update(Microsoft.Xna.Framework.GameTime)">
+            <summary>
+            
+            </summary>
+            <param name="gameTime"></param>
         </member>
         <member name="T:GameOfLife.Program">
             <summary>

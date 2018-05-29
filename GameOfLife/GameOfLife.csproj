@@ -23,8 +23,8 @@
     <OutputPath>bin\Windows\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>C:\Users\Vladislav Sincariuc\source\repos\Game-of-Life\.xml</DocumentationFile>
+    <WarningLevel>0</WarningLevel>
+    <DocumentationFile>C:\Users\felix a\source\repos\Game-of-Life\.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>

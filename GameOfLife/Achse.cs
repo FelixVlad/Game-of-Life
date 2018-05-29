@@ -14,18 +14,19 @@ namespace GameOfLife
     /// </summary>
     public class Achse : DrawableGameComponent
     {
-        public const int AchseWidth = 400;
-        public const int AchseHeight = 400;
-
-        public const int UpdateInterval = 1000;
-
-        public bool[,,] Cells;
-        public Rectangle[,] Rechts;
-
-        public SpriteBatch SpriteBatch;
-        public Texture2D LivingCellTexture;
-        public Input Input;
-
+        private const int AchseWidth = 400;
+        private const int AchseHeight = 400;
+        private const int UpdateInterval = 25;
+        private readonly bool[,,] _zellen;
+        private readonly Rectangle[,] _rechts;
+        private readonly SpriteBatch _spriteBatch;
+        private Texture2D _lebendeZelleTexture;
+        private readonly Input _input;
+        private int _millisecondsSinceUpdated;
+        private int _currentIndex;
+        private int _futureIndex = 1;
+        private int _oldWidth;
+        private int _oldHeight;
 
         /// <summary>
         /// 
@@ -35,10 +36,12 @@ namespace GameOfLife
         /// <param name="input"></param>
         public Achse(Game game, SpriteBatch spriteBatch, Input input) : base(game)
         {
-            Cells = new bool[2, AchseWidth + 2, AchseHeight + 2];
-            Rechts = new Rectangle[AchseWidth, AchseHeight];
-            this.SpriteBatch = spriteBatch;
-            this.Input = input;
+
+            _zellen = new bool[2, AchseWidth + 2, AchseHeight + 2];
+            _rechts = new Rectangle[AchseWidth, AchseHeight];
+
+            this._spriteBatch = spriteBatch;
+            this._input = input;
         }
 
         /// <summary>
@@ -46,11 +49,11 @@ namespace GameOfLife
         /// </summary>
         protected override void LoadContent()
         {
-            LivingCellTexture = new Texture2D(GraphicsDevice, 1, 1);
+            _lebendeZelleTexture = new Texture2D(GraphicsDevice, 1, 1);
             var colors = new Color[1];
             colors[0] = Color.White;
 
-            LivingCellTexture.SetData(0, new Rectangle(0, 0, 1, 1), colors, 0, 1);
+            _lebendeZelleTexture.SetData(0, new Rectangle(0, 0, 1, 1), colors, 0, 1);
 
             base.LoadContent();
         }
@@ -58,45 +61,22 @@ namespace GameOfLife
         /// <summary>
         /// 
         /// </summary>
-        public int MillisecondsSinceUpdated;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int CurrentIndex;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int FutureIndex = 1;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int OldWidth;
-        /// <summary>
-        /// 
-        /// </summary>
-        public int OldHeight;
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            if (Input.SpaceTrigger)
-            {
+            if (_input.SpaceTrigger)
                 CreateRandomCells(20);
-            }
-            if (Input.ResetTrigger)
-            {
+            
+
+            if (_input.ResetTrigger)
                 ResetCells();
-            }
+            
 
-            MillisecondsSinceUpdated += gameTime.ElapsedGameTime.Milliseconds;
+            _millisecondsSinceUpdated += gameTime.ElapsedGameTime.Milliseconds;
 
-            if (MillisecondsSinceUpdated >= UpdateInterval)
+            if (_millisecondsSinceUpdated >= UpdateInterval)
             {
-                MillisecondsSinceUpdated = 0;
+                _millisecondsSinceUpdated = 0;
                 for (var y = 1; y < AchseHeight + 1; y++)
                 {
                     for (var x = 1; x < AchseWidth + 1; x++)
@@ -104,69 +84,65 @@ namespace GameOfLife
                         var neighboursCount = 0;
 
                         //link
-                        if (Cells[CurrentIndex, x - 1, y])
+                        if (_zellen[_currentIndex, x - 1, y])
                             neighboursCount++;
 
                         //rechts
-                        if (Cells[CurrentIndex, x + 1, y])
+                        if (_zellen[_currentIndex, x + 1, y])
                             neighboursCount++;
 
                         //oben
-                        if (Cells[CurrentIndex, x, y - 1])
+                        if (_zellen[_currentIndex, x, y - 1])
                             neighboursCount++;
 
                         //unten
-                        if (Cells[CurrentIndex, x, y + 1])
+                        if (_zellen[_currentIndex, x, y + 1])
                             neighboursCount++;
 
                         //links oben
-                        if (Cells[CurrentIndex, x - 1, y - 1])
+                        if (_zellen[_currentIndex, x - 1, y - 1])
                             neighboursCount++;
 
                         //links unten
-                        if (Cells[CurrentIndex, x - 1, y + 1])
+                        if (_zellen[_currentIndex, x - 1, y + 1])
                             neighboursCount++;
 
                         //rechts unten
-                        if (Cells[CurrentIndex, x + 1, y + 1])
+                        if (_zellen[_currentIndex, x + 1, y + 1])
                             neighboursCount++;
 
                         //rechts oben
-                        if (Cells[CurrentIndex, x + 1, y - 1])
+                        if (_zellen[_currentIndex, x + 1, y - 1])
                             neighboursCount++;
 
                         if (neighboursCount == 3)
-                        {
-                            Cells[FutureIndex, x, y] = true;
-                        }
+                            _zellen[_futureIndex, x, y] = true;
+                        
                         else if (neighboursCount < 2)
-                            Cells[FutureIndex, x, y] = false;
+                            _zellen[_futureIndex, x, y] = false;
                         else if (neighboursCount > 3)
-                            Cells[FutureIndex, x, y] = false;
-                        else if (neighboursCount == 2 && Cells[FutureIndex, x, y])
-                            Cells[FutureIndex, x, y] = true;
-
-
-
+                            _zellen[_futureIndex, x, y] = false;
+                        else if (neighboursCount == 2 && _zellen[_currentIndex, x, y])
+                            _zellen[_futureIndex, x, y] = true;
                     }
                 }
 
-                if (CurrentIndex == 0)
+                if (_currentIndex == 0)
                 {
-                    CurrentIndex = 1;
-                    FutureIndex = 0;
+                    _currentIndex = 1;
+                    _futureIndex = 0;
                 }
                 else
                 {
-                    CurrentIndex = 0;
-                    FutureIndex = 1;
+                    _currentIndex = 0;
+                    _futureIndex = 1;
                 }
             }
 
             var width = GraphicsDevice.Viewport.Width;
             var heigth = GraphicsDevice.Viewport.Height;
 
-            if (OldWidth != width || OldHeight != heigth)
+            if (_oldWidth != width || _oldHeight != heigth)
             {
                 var zellenWidth = width / AchseWidth;
                 var zellenHeigth = heigth / AchseHeight;
@@ -174,41 +150,42 @@ namespace GameOfLife
                 var zellenSize = Math.Min(zellenWidth, zellenHeigth);
 
                 var offSetX = (width - (zellenSize * AchseWidth)) / 2;
-                var offSetY = (width - (zellenSize * AchseHeight)) / 2;
+                var offSetY = (heigth - (zellenSize * AchseHeight)) / 2;
 
                 for (var y = 0; y < AchseHeight; y++)
                 {
                     for (var x = 0; x < AchseWidth; x++)
                     {
-                        Rechts[x, y] = new Rectangle(offSetX + x * zellenSize, offSetY + y * zellenSize, zellenSize,
-                            zellenSize);
+                        _rechts[x, y] = new Rectangle(offSetX + x * zellenSize, offSetY + y * zellenSize, zellenSize, zellenSize);
                     }
                 }
-                OldHeight = heigth;
-                OldWidth = width;
+                _oldHeight = heigth;
+                _oldWidth = width;
             }
 
-
             base.Update(gameTime);
-
         }
 
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin();
+            _spriteBatch.Begin();
 
             for (var y = 1; y < AchseHeight + 1; y++)
             {
-                for (var x = 1; x < AchseWidth + 1; x++)
+                for (var x = 1; x < AchseWidth + 1; x++) 
                 {
-                    if (Cells[CurrentIndex, x, y])
-                        SpriteBatch.Draw(LivingCellTexture, Rechts[x - 1, y - 1], Color.White);
+                    if (_zellen[_currentIndex, x, y])
+                        _spriteBatch.Draw(_lebendeZelleTexture, _rechts[x - 1, y - 1], Color.White);
                 }
             }
 
-            SpriteBatch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
@@ -222,9 +199,9 @@ namespace GameOfLife
                 for (var y = 1; y < AchseHeight + 1; y++)
                 {
                     if (r.Next(0, probability) == 0)
-                        Cells[CurrentIndex, x, y] = true;
+                        _zellen[_currentIndex, x, y] = true;
                     else
-                        Cells[CurrentIndex, x, y] = false;
+                        _zellen[_currentIndex, x, y] = false;
                 }
             }
         }
@@ -235,9 +212,10 @@ namespace GameOfLife
             {
                 for (var x = 1; x < AchseWidth + 1; x++)
                 {
-                    Cells[CurrentIndex, x, y] = false;
+                    _zellen[_currentIndex, x, y] = false;
                 }
             }
         }
+
     }
 }

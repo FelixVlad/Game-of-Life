@@ -9,16 +9,20 @@ namespace GameOfLife
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _spriteBatch;
+        private SpriteBatch _spriteBatch;
+        private Input _input;
+        private Achse _achse;
 
         /// <summary>
         /// 
         /// </summary>
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            var graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 1800;
+            graphics.PreferredBackBufferHeight = 900;
         }
 
         /// <summary>
@@ -29,7 +33,16 @@ namespace GameOfLife
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _input = new Input(this);
+            _achse = new Achse(this, _spriteBatch, _input);
+
+            _input.UpdateOrder = 1;
+            _achse.UpdateOrder = 2;
+
+            Components.Add(_input);
+            Components.Add(_achse);
+
 
             base.Initialize();
         }
@@ -40,10 +53,8 @@ namespace GameOfLife
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+
         }
 
         /// <summary>
@@ -52,7 +63,7 @@ namespace GameOfLife
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
         /// <summary>
@@ -62,10 +73,8 @@ namespace GameOfLife
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -76,9 +85,7 @@ namespace GameOfLife
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            GraphicsDevice.Clear(Color.Black);
 
             base.Draw(gameTime);
         }

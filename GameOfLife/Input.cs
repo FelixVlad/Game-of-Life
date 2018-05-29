@@ -11,7 +11,7 @@ namespace GameOfLife
 {
     /// <summary>
     /// The Input class.
-    /// </summary>
+    /// </summary>  
     public class Input : GameComponent
     {
 
@@ -24,7 +24,18 @@ namespace GameOfLife
 
         }
 
-        KeyboardState _oldState;
+        private KeyboardState _oldState;
+         
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool SpaceTrigger { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ResetTrigger { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,24 +47,15 @@ namespace GameOfLife
             SpaceTrigger = false;
             ResetTrigger = false;
 
-            if (currentState.IsKeyUp(Keys.Space) && !_oldState.IsKeyDown(Keys.Space))
+            if (currentState.IsKeyDown(Keys.Space) && !_oldState.IsKeyDown(Keys.Space))
                 SpaceTrigger = true;
-            if (currentState.IsKeyDown(Keys.R) && _oldState.IsKeyDown(Keys.R))
+             
+            if (currentState.IsKeyDown(Keys.R) && !_oldState.IsKeyDown(Keys.R))
                 ResetTrigger = true;
-
 
             _oldState = currentState;
 
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool SpaceTrigger { get; private set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool ResetTrigger { get; private set; }
 
     }
 }
