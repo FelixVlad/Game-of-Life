@@ -53,8 +53,7 @@ namespace GameOfLife
         /// </summary>
         protected override void LoadContent()
         {
-
-
+            _achse.font = Content.Load<SpriteFont>("Menu");
         }
 
         /// <summary>

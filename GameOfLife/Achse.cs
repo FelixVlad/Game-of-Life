@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Schema;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,7 +11,7 @@ namespace GameOfLife
     {
         private const int AchseWidth = 400;
         private const int AchseHeight = 400;
-        private const int UpdateInterval = 25;
+        private const int UpdateInterval = 30;
         private readonly bool[,,] _zellen;
         private readonly Rectangle[,] _rechts;
         private readonly SpriteBatch _spriteBatch;
@@ -27,6 +22,7 @@ namespace GameOfLife
         private int _futureIndex = 1;
         private int _oldWidth;
         private int _oldHeight;
+        public SpriteFont font { get; set; }
 
         /// <summary>
         /// 
@@ -48,7 +44,7 @@ namespace GameOfLife
         /// 
         /// </summary>
         protected override void LoadContent()
-        {
+        {   
             _lebendeZelleTexture = new Texture2D(GraphicsDevice, 1, 1);
             var colors = new Color[1];
             colors[0] = Color.White;
@@ -84,7 +80,7 @@ namespace GameOfLife
                     {
                         var neighboursCount = 0;
 
-                        //link
+                        //links
                         if (_zellen[_currentIndex, x - 1, y])
                             neighboursCount++;
 
@@ -176,6 +172,14 @@ namespace GameOfLife
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
+
+            _spriteBatch.DrawString(font, "****** Main Menu of the \"Game of Life\" ******", new Vector2(50, 175), Color.White);
+            _spriteBatch.DrawString(font, "1. Press 'Space' to start the \"Game of Life\".", new Vector2(50, 250), Color.White);
+            _spriteBatch.DrawString(font, "2. Press 'F' to start in the \"Figure Mode\".", new Vector2(50, 300), Color.White);
+            _spriteBatch.DrawString(font, "3. Press 'R' to restart the \"Game of Life\".", new Vector2(50, 350), Color.White);
+            _spriteBatch.DrawString(font, "4. Press 'ESC' to exit. ", new Vector2(50, 400), Color.White);
+            _spriteBatch.DrawString(font, "**************************************************", new Vector2(50, 475), Color.White);
+
 
             for (var y = 1; y < AchseHeight + 1; y++)
             {
